@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AIでホームページを作りたい初心者向け用語教材</title>
+<style>
+/* Base & Typography */
+:root {
+  --bg-main: #f8fafc;
+  --text-main: #0f172a;
+  --text-muted: #475569;
+  --primary: #4f46e5;
+  --primary-light: #e0e7ff;
+  --primary-glow: rgba(79, 70, 229, 0.4);
+  --secondary: #0ea5e9;
+  --border-color: #e2e8f0;
+  --card-bg: #ffffff;
+  
+  --shadow-sm: 0 1px 3px 0 rgb(0 0 0 / 0.1);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg: 0 10px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+  --shadow-hover: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.04);
+  
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Hiragino Sans', 'Noto Sans JP', sans-serif;
+  background-color: var(--bg-main);
+  color: var(--text-main);
+  line-height: 1.8;
+  -webkit-font-smoothing: antialiased;
+}
+
+.page-wrap { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 5rem; }
+
+/* Hero Section */
+.hero {
+  background: linear-gradient(135deg, #4f46e5 0%, #0ea5e9 100%);
+  border-radius: 24px;
+  padding: 3.5rem 3rem;
+  margin-bottom: 3rem;
+  color: #fff;
+  box-shadow: 0 20px 40px -10px var(--primary-glow);
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: ''; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+  background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 60%);
+  animation: rotate 20s linear infinite; pointer-events: none;
+}
+@keyframes rotate { 100% { transform: rotate(360deg); } }
+.hero h1 { font-size: 28px; font-weight: 800; margin-bottom: 1rem; line-height: 1.3; letter-spacing: -0.02em; position: relative; z-index: 1; }
+.hero p { font-size: 16px; opacity: 0.95; line-height: 1.8; position: relative; z-index: 1; max-width: 600px; }
+
+/* Goal Box */
+.goal-box {
+  background: var(--card-bg); border-radius: 16px; padding: 2rem; margin-bottom: 3.5rem;
+  border: 1px solid var(--border-color); box-shadow: var(--shadow-sm);
+  position: relative; overflow: hidden;
+}
+.goal-box::before { content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%; background: var(--secondary); }
+.goal-box h2 { font-size: 18px; font-weight: 700; margin-bottom: 0.75rem; color: var(--text-main); display: flex; align-items: center; gap: 8px; }
+.goal-box p { font-size: 15px; color: var(--text-muted); }
+
+/* Chapters */
+.chapter { margin-bottom: 4rem; }
+.chapter-title {
+  font-size: 14px; font-weight: 700; letter-spacing: 0.1em; color: var(--primary);
+  text-transform: uppercase; margin-bottom: 1rem; display: flex; align-items: center; gap: 10px;
+}
+.chapter-title::after { content: ''; flex: 1; height: 2px; background: var(--primary-light); border-radius: 2px; }
+.chapter-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 2rem; }
+
+/* Details (Cards) */
+details {
+  background: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px;
+  margin-bottom: 1.25rem; overflow: hidden; box-shadow: var(--shadow-md); transition: var(--transition);
+}
+details:hover { transform: translateY(-3px); box-shadow: var(--shadow-hover); border-color: rgba(79, 70, 229, 0.2); }
+details[open] { box-shadow: var(--shadow-lg); border-color: rgba(79, 70, 229, 0.3); transform: translateY(0); }
+
+summary { display: flex; align-items: center; gap: 16px; padding: 1.25rem 1.5rem; cursor: pointer; list-style: none; user-select: none; transition: background 0.2s; }
+summary::-webkit-details-marker { display: none; }
+summary:hover { background: #f8fafc; }
+
+.s-icon {
+  width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+  font-size: 20px; flex-shrink: 0; box-shadow: inset 0 2px 4px rgba(255,255,255,0.5), 0 2px 5px rgba(0,0,0,0.05);
+}
+.s-text { flex: 1; }
+.s-term { font-size: 17px; font-weight: 700; color: var(--text-main); }
+.s-tagline { font-size: 14px; color: var(--text-muted); margin-top: 4px; }
+.s-arrow { font-size: 14px; color: #94a3b8; transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1); width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background: #f1f5f9; border-radius: 50%; }
+details[open] .s-arrow { transform: rotate(180deg); background: var(--primary-light); color: var(--primary); }
+
+.card-body { padding: 0 1.5rem 1.5rem; border-top: 1px solid #f1f5f9; margin-top: 0.5rem; padding-top: 1.5rem; }
+
+/* Content inside cards */
+.sl { font-size: 12px; font-weight: 700; color: #64748b; letter-spacing: 0.05em; text-transform: uppercase; margin: 1.5rem 0 0.5rem; display: flex; align-items: center; gap: 6px; }
+.sl:first-child { margin-top: 0; }
+.st { font-size: 15px; color: var(--text-main); }
+
+/* Message Boxes */
+.ai-box, .mistake-box, .example-box {
+  border-radius: 12px; padding: 1.25rem; margin-top: 0.75rem; font-size: 14.5px; line-height: 1.7; position: relative;
+}
+.ai-box { background: #eef2ff; color: #3730a3; border-left: 4px solid #6366f1; }
+.mistake-box { background: #fff1f2; color: #9f1239; border-left: 4px solid #f43f5e; }
+.example-box { background: #ecfdf5; color: #065f46; border-left: 4px solid #10b981; }
+
+.divider { height: 1px; background: var(--border-color); margin: 2rem 0; opacity: 0.6; }
+
+/* Finish Box */
+.finish-box {
+  background: var(--card-bg); border-radius: 16px; padding: 2.5rem; border: 2px dashed #818cf8;
+  margin-top: 3rem; text-align: center; box-shadow: var(--shadow-md);
+}
+.finish-box h3 { font-size: 18px; font-weight: 800; color: var(--primary); margin-bottom: 1.25rem; }
+.finish-box .prompt {
+  background: #f8fafc; border-radius: 12px; padding: 1.5rem; font-size: 15px; color: var(--text-main);
+  line-height: 1.8; text-align: left; border: 1px solid var(--border-color); font-weight: 500;
+}
+.finish-box p { font-size: 14px; color: var(--text-muted); margin-top: 1rem; }
+
+footer { text-align: center; font-size: 13px; color: #94a3b8; margin-top: 4rem; padding-top: 2rem; border-top: 1px solid var(--border-color); }
+</style>
+</head>
+<body>
+<div class="page-wrap">
+
+<div class="hero">
+  <h1>🏠 AIにホームページ制作を頼める！<br>初心者向け用語の教科書</h1>
+  <p>「ヒーローセクションって何？」という状態から、「AIに正しく指示できる」状態になることがゴール。<br>全18用語を3章に分けてわかりやすく解説します。各カードをクリックして読んでみてください。</p>
+</div>
+
+<div class="goal-box">
+  <h2>📖 この教材の使い方</h2>
+  <p>難しい技術は一切不要です。読み進めながら「AIへの頼み方」の例文をメモしておくと、実際にサイトを作るときにそのまま使えます。最後の「卒業チェックプロンプト」が書けるようになったらゴール達成です！</p>
+</div>
+
+<!-- ========== CHAPTER 1 ========== -->
+<div class="chapter">
+  <div class="chapter-title">📐 章1｜画面の構成パーツ</div>
+  <div class="chapter-desc">ホームページは「パーツの集まり」でできています。名前を知るだけで、AIへの指示がグッと具体的になります。</div>
+
+  <!-- ヘッダー -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#eaf3de">🟢</div>
+      <div class="s-text">
+        <div class="s-term">ヘッダー</div>
+        <div class="s-tagline">すべてのページの「看板」エリア</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">玄関の上に掲げてある「表札と案内板」。どの部屋に行っても必ず目に入る場所です。</div>
+      <div class="sl">役割</div>
+      <div class="st">会社のロゴやサイト名、メニュー（ナビゲーション）を置く場所。訪問者が「どこにいるか」「どこに行けるか」を一目でわかるようにします。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ページの一番上。スクロールしても常に表示されるタイプ（固定ヘッダー）も多い。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ヘッダーに会社ロゴ（左）とナビゲーションメニュー（右）を配置してください。スクロールしても上部に固定表示にしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">メニューが多すぎてごちゃごちゃになりがち。まず「ホーム・サービス・お問い合わせ」の3〜5項目に絞ると良いです。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Appleのサイトのヘッダー→左にAppleマーク、中央に「Mac・iPhone・iPad…」のメニュー、右に検索アイコン。シンプルで迷わない。</div>
+    </div>
+  </details>
+
+  <!-- ヒーローセクション -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#eeedfe">🟣</div>
+      <div class="s-text">
+        <div class="s-term">ヒーローセクション</div>
+        <div class="s-tagline">開いた瞬間に目に飛び込む「主役」エリア</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">玄関を開けたとき最初に見える、一番目立つ壁。ここで「このお店、いい感じ！」と感じてもらう。</div>
+      <div class="sl">役割</div>
+      <div class="st">訪問者の第一印象を決める最重要エリア。大きな画像やキャッチコピー、ボタンを置いて「ここは何のサイトか」を3秒以内に伝えます。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ヘッダーのすぐ下。ページを開いて最初に見える大きなエリア全体。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ヒーローセクションに大きな背景画像、キャッチコピー（例：あなたの毎日をもっと豊かに）、そして「今すぐ試す」というCTAボタンを配置してください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">大きい画像だけ置いて文字もボタンも入れない。訪問者は「で、何をすればいいの？」と迷って離れてしまいます。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Appleの新製品ページ→製品の美しい画像＋「今すぐ購入」ボタン。何をすべきかが一目瞭然。</div>
+    </div>
+  </details>
+
+  <!-- CTA -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faece7">🔴</div>
+      <div class="s-text">
+        <div class="s-term">CTA（シーティーエー）</div>
+        <div class="s-tagline">訪問者に「次の行動」を促すボタンや文章</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店の「いらっしゃいませ！今日はこちらがおすすめです→」という声かけ。行動を誘導する合図。</div>
+      <div class="sl">役割</div>
+      <div class="st">「Call To Action（行動の呼びかけ）」の略。「今すぐ申し込む」「無料で試す」「お問い合わせ」など、訪問者に次の一歩を踏み出させるボタンや文章のこと。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ヒーローセクション・各セクションの末尾・ページ下部など、複数か所に置くことが多い。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「「無料で相談する」というCTAボタンをヒーローセクションの中央に配置してください。ボタンの色は目立つ緑色にしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「詳しくはこちら」だけでは弱い。「今すぐ○○する」のように具体的な行動を書くとクリックされやすくなります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Netflixのトップ→「今すぐ始める」ボタンが目立つ赤色で中央に。これがCTA。</div>
+    </div>
+  </details>
+
+  <!-- フッター -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#d3d1c7">⬛</div>
+      <div class="s-text">
+        <div class="s-term">フッター</div>
+        <div class="s-tagline">ページの一番下にある「補足情報エリア」</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">本の奥付（最後のページにある住所や発行日）。補足情報がまとまっている場所。</div>
+      <div class="sl">役割</div>
+      <div class="st">会社情報・プライバシーポリシー・著作権表示・SNSリンクなどを置く場所。すべてのページ下部に共通で表示されます。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ページを一番下までスクロールした場所。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「フッターに会社名・メールアドレス・プライバシーポリシーのリンク・コピーライト（©2025）を入れてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">フッターを作り忘れるか、ガラガラのまま放置。プライバシーポリシーが無いと信頼感が下がります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Amazonのフッター→カテゴリリンク・会社情報・各国サイトへのリンクが整理されている。</div>
+    </div>
+  </details>
+
+  <!-- ファーストビュー -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#e6f1fb">🔵</div>
+      <div class="s-text">
+        <div class="s-term">ファーストビュー</div>
+        <div class="s-tagline">スクロールせずに見える「最初の画面」</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店のショーウィンドウ。外から歩いて来た人が最初に目にする部分。</div>
+      <div class="sl">役割</div>
+      <div class="st">ページを開いたときにスクロールしなくても見える範囲のこと。ここが魅力的じゃないと、訪問者はスクロールせずに離れてしまいます。「ヒーローセクション」とほぼ同じ意味で使われることも多い。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">画面の上から下の端まで。スマホとパソコンでサイズが違います。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ファーストビューにキャッチコピーとCTAボタンを入れて、スクロールしなくてもすぐ行動できるようにしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">ファーストビューに情報を詰め込みすぎて、何が大事かわからなくなる。1つのメッセージに絞るのが鉄則。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Notionのトップ→開いた瞬間に「ノート・タスク・プロジェクトを1か所で」というコピーとCTAが見える。</div>
+    </div>
+  </details>
+
+  <!-- FAQ -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faeeda">🟡</div>
+      <div class="s-text">
+        <div class="s-term">FAQ</div>
+        <div class="s-tagline">よくある質問をまとめたコーナー</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店の入り口に貼ってある「よくあるご質問」の紙。電話しなくてもだいたい解決できる。</div>
+      <div class="sl">役割</div>
+      <div class="st">「Frequently Asked Questions（よくある質問）」の略。訪問者が疑問を持ちそうな質問と答えを先にまとめておく。問い合わせを減らせて信頼感も上がります。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">サービス紹介の後・ページ下部・専用のFAQページなど。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「FAQセクションを作ってください。質問をクリックすると答えが開くアコーディオン形式にしてください。質問は5つ用意します」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">FAQを作らずに放置する。「料金はいくら？」「解約はできる？」という基本的な疑問を解消するだけで問い合わせが大幅に減ります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Airbnbのヘルプページ→質問をクリックすると答えが開くタイプ。スッキリ見やすい。</div>
+    </div>
+  </details>
+
+  <!-- カードUI -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#e1f5ee">🟢</div>
+      <div class="s-text">
+        <div class="s-term">カードUI</div>
+        <div class="s-tagline">情報を「カード型」の箱に整理して並べる</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">名刺立てに並んだカード。それぞれに一つずつ情報がまとまっていて、見比べやすい。</div>
+      <div class="sl">役割</div>
+      <div class="st">商品・サービス・メンバー紹介・ブログ記事などを四角い箱（カード）に入れて並べるデザインのこと。情報が整理されて見やすくなります。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">サービス紹介・商品一覧・チームメンバー紹介など、複数の情報を並べたいときに使う。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「3つのサービスをカードUI（横並び3列）で表示してください。各カードにアイコン・タイトル・説明文・ボタンを入れてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">カードごとに高さがバラバラになってしまう。AIに「カードの高さをそろえてください」と一言追加するとキレイになります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Twitterのトレンド欄・Airbnbの物件一覧→それぞれカード型に情報がまとまって並んでいる。</div>
+    </div>
+  </details>
+
+  <!-- ハンバーガーメニュー -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#fbeaf0">🌸</div>
+      <div class="s-text">
+        <div class="s-term">ハンバーガーメニュー</div>
+        <div class="s-tagline">三本線のアイコン＝スマホ用の折りたたみメニュー</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">引き出し式の棚。普段は閉まっているが、引き出すと全部が出てくる。</div>
+      <div class="sl">役割</div>
+      <div class="st">スマホの小さな画面でメニューをコンパクトに収めるための仕組み。「≡」の三本線アイコンをタップするとメニューが表示される。ハンバーガーに見えることからこの名前。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">スマホ表示のヘッダー右上（または左上）の三本線アイコン部分。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「スマホ表示のときはヘッダーのメニューをハンバーガーメニューに切り替えてください。タップしたらメニューが縦に展開する形にしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">ハンバーガーメニューを作ったのに、タップしても何も起きない（動作しない）ことがある。AIに「ちゃんと動く形で作ってください」と伝えましょう。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">ほぼすべてのニュースサイト・ECサイトのスマホ版→右上の三本線がハンバーガーメニュー。</div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== CHAPTER 2 ========== -->
+<div class="chapter">
+  <div class="chapter-title">🤖 章2｜AI制作でよく使う言葉</div>
+  <div class="chapter-desc">AIにお願いするときに使う専門用語です。これを知っていると、指示の精度がグッと上がります。</div>
+
+  <!-- レスポンシブ -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#e6f1fb">🔵</div>
+      <div class="s-text">
+        <div class="s-term">レスポンシブ（デザイン）</div>
+        <div class="s-tagline">スマホ・タブレット・PCどれでも見やすく自動調整</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">どんな形のガラスびんにも入れると形を変える水のような柔軟さ。画面サイズに合わせてデザインが変わる。</div>
+      <div class="sl">役割</div>
+      <div class="st">パソコンでは横3列表示、スマホでは縦1列表示のように、画面の大きさに応じてレイアウトが自動で変わる仕組みのこと。今や必須の技術です。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ページ全体に適用されます。特定の場所ではなく、サイト全体の設計の話です。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「レスポンシブデザインにしてください。スマホでは1列、タブレットでは2列、PCでは3列で表示するようにしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">パソコンで見てキレイだからといってOKにしてしまう。必ずスマホ表示も確認してください（訪問者の半数以上がスマホ経由）。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Instagramをブラウザで開いてウィンドウを小さくすると、スマホ用レイアウトに切り替わる。それがレスポンシブ。</div>
+    </div>
+  </details>
+
+  <!-- プロンプト -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#eeedfe">🟣</div>
+      <div class="s-text">
+        <div class="s-term">プロンプト</div>
+        <div class="s-tagline">AIに送る「お願いの文章」のこと</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">大工さんへの発注書。「どこに・何を・どんな風に作ってほしいか」を書いたもの。詳しく書くほど思い通りのものができる。</div>
+      <div class="sl">役割</div>
+      <div class="st">AIに指示を与えるための文章のこと。「どんなホームページを作ってほしいか」を言葉で伝えることで、AIが制作してくれます。この教材を読むこと自体が「より良いプロンプトを書く練習」です。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">あなたがAIに入力するチャット欄。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 プロンプトの書き方のコツ</div>
+      <div class="ai-box">❌「かっこいいサイトを作って」→曖昧すぎる<br><br>✅「整体院のホームページを作ってください。ヒーローセクションに大きな背景画像とキャッチコピー、CTAボタンを入れてください。色はブルーと白を基調に、清潔感のあるデザインにしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「いい感じにして」「おしゃれにして」など、感覚的な言葉だけで伝えてしまう。この教材の用語を使って具体的に伝えると精度が格段に上がります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">「飲食店のランディングページを作ってください。ヒーローセクション・メニューのカードUI・FAQを含めてください。レスポンシブ対応必須です」←これが良いプロンプト。</div>
+    </div>
+  </details>
+
+  <!-- テンプレート -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#e1f5ee">🟢</div>
+      <div class="s-text">
+        <div class="s-term">テンプレート</div>
+        <div class="s-tagline">「雛形（ひながた）」。そのまま使えるデザインの型</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">注文住宅の間取り図のサンプル。そのまま建ててもいいし、一部変えてもいい。</div>
+      <div class="sl">役割</div>
+      <div class="st">すでに完成しているデザインの型のこと。ゼロから作らず、テンプレートをベースにすることで大幅に時間を節約できます。ブログ用・ショップ用・会社紹介用など種類が豊富。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">WordPressやSTUDIO・WixなどのWebサービス内。AIにも「○○業種のテンプレートを作って」と頼めます。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「美容院向けのホームページテンプレートを作ってください。ヘッダー・ヒーローセクション・サービス紹介・スタッフ紹介・FAQ・フッターの構成でお願いします」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">テンプレートをそのまま使って中身（文章や画像）だけ変える。それ自体はOKだが、テンプレートの意味や構成を理解せずに使うと後で困ります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Notionやsquarespaceで「業種を選んでスタート」→あれがテンプレートを選ぶ操作。</div>
+    </div>
+  </details>
+
+  <!-- コンポーネント -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faece7">🔴</div>
+      <div class="s-text">
+        <div class="s-term">コンポーネント</div>
+        <div class="s-tagline">ホームページを作る「部品」のひとつひとつ</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">家を作るときの「ドア・窓・壁・階段」などのパーツ。それぞれを組み合わせて家ができる。</div>
+      <div class="sl">役割</div>
+      <div class="st">ヘッダー・ボタン・カード・フォームなど、ホームページを構成する再利用できる部品のこと。1度作ったら複数ページで使い回せるため効率的です。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">特定の場所ではなく、ページ全体を「部品の組み合わせ」として考えるときの概念です。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「「お問い合わせボタン」のコンポーネントを作ってください。ボタンの色は青、文字は白、クリックするとフォームが開くようにしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">難しそうな言葉に聞こえるが、要は「部品を作って」という意味。AIに「○○コンポーネントを作って」と言うだけでOK。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Twitterの「ツイートボタン」・Amazonの「カートに入れる」ボタン→これらも独立したコンポーネント。</div>
+    </div>
+  </details>
+
+  <!-- レイアウト -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faeeda">🟡</div>
+      <div class="s-text">
+        <div class="s-term">レイアウト</div>
+        <div class="s-tagline">文字・画像・ボタンをどこに・どう並べるかの設計</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">家の間取り図。どこにリビング・キッチン・寝室を置くかの配置計画。</div>
+      <div class="sl">役割</div>
+      <div class="st">ページ内の要素（文章・画像・ボタン）をどこに置くかの「配置の考え方」のこと。レイアウトが良いと見やすく、悪いと読みづらくなります。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ページ全体・各セクション・カード内など、あらゆる場所でレイアウトの考え方が関わります。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ヒーローセクションのレイアウトを、左半分にテキスト・右半分に画像の2カラム構成にしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「いい感じに並べて」だけでは伝わりにくい。「左にテキスト・右に画像」「上にタイトル・下に説明」など位置を言葉で伝えましょう。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">新聞→左右2段組みはレイアウトの一種。Webでも同じように「何列で・どこに何を置くか」を設計します。</div>
+    </div>
+  </details>
+
+  <!-- アニメーション -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#fbeaf0">🌸</div>
+      <div class="s-text">
+        <div class="s-term">アニメーション</div>
+        <div class="s-tagline">ページの要素をふわっと動かす「動き」</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">自動ドアがスーッと開く感じ。何もしないより少し動くだけで印象がグッと変わる。</div>
+      <div class="sl">役割</div>
+      <div class="st">スクロールすると文字がふわっと現れる・ボタンにマウスを乗せると色が変わるなど、ページに「動き」を加えること。適度なアニメーションは印象を良くします。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">スクロール時の出現エフェクト・ホバー（マウスを乗せた）エフェクト・ローディング画面など、様々な場所に使われます。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「スクロールしたときにカードが下からふわっと現れるアニメーションを付けてください。過度にならないシンプルなものにしてください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">アニメーションを付けすぎて、チカチカしてうるさい印象になりがち。「控えめに・シンプルに」という指示も必ずセットで入れましょう。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Appleの製品ページ→スクロールするとスペックが一行ずつ現れる。これがスクロールアニメーション。</div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== CHAPTER 3 ========== -->
+<div class="chapter">
+  <div class="chapter-title">🌐 章3｜公開するときに知っておく言葉</div>
+  <div class="chapter-desc">サイトを完成させて世界に公開するとき、避けて通れない用語です。難しそうに見えますが、概念を知っておくだけでAIへの指示が変わります。</div>
+
+  <!-- OGP -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#eeedfe">🟣</div>
+      <div class="s-text">
+        <div class="s-term">OGP（オージーピー）</div>
+        <div class="s-tagline">SNSでシェアしたときに表示されるカード画像の設定</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店のチラシ。誰かが「このお店よかったよ」と友達に紹介するとき、口コミと一緒に渡すチラシのイメージ。</div>
+      <div class="sl">役割</div>
+      <div class="st">「Open Graph Protocol」の略。LINEやX（旧Twitter）などでページのURLを貼ったとき、カード状に「タイトル・説明・画像」が表示される仕組みのこと。設定しないと地味な表示になります。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">HTMLの見えない部分（headタグ内）に設定します。ページには表示されないがSNSに反映される。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「OGP設定を追加してください。タイトルは「○○整体院｜肩こり・腰痛専門」、説明文は「○○市で15年の実績。初回限定3,000円でお試しできます」、OG画像は1200×630pxで設定してください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">OGPを設定しないでSNSでシェアしたら、リンク先のURLしか表示されずクリックされにくくなる。シェアで拡散を狙うなら必須です。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">LINEでYouTubeのURLを送ると、サムネイルとタイトルが表示されるアレがOGP。設定されているから目を引く。</div>
+    </div>
+  </details>
+
+  <!-- ファビコン -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#eaf3de">🟢</div>
+      <div class="s-text">
+        <div class="s-term">ファビコン</div>
+        <div class="s-tagline">ブラウザのタブに出る小さなアイコン</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店の看板ミニチュア版。遠くから見ても「あ、あのお店だ」とわかるアイコン。</div>
+      <div class="sl">役割</div>
+      <div class="st">ブラウザのタブや、ブックマーク一覧に表示される小さなアイコン（16×16px程度）のこと。「Favorite Icon（お気に入りアイコン）」の略。設定しておくと、サイトが本格的に見えます。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ブラウザのタブ（ページのタイトルの左隣）。ブックマーク一覧にも表示される。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ファビコンの設定コードを追加してください。favicon.icoというファイルを使う前提で、HTMLのheadタグ内に追記してください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">ファビコンを設定しないと、ブラウザのデフォルト（地球儀マーク）が表示されてしまい、プロっぽさが下がります。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Googleのタブに出る色付きの「G」、YouTubeのタブに出る赤い再生ボタン→あれがファビコン。</div>
+    </div>
+  </details>
+
+  <!-- SEO -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faece7">🔴</div>
+      <div class="s-text">
+        <div class="s-term">SEO（エスイーオー）</div>
+        <div class="s-tagline">Googleで上位に表示されるための工夫</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">お店を「駅の目の前」に構えること。同じお店でも場所（検索順位）によって来客数が全然違う。</div>
+      <div class="sl">役割</div>
+      <div class="st">「Search Engine Optimization（検索エンジン最適化）」の略。Googleなどで検索したとき、自分のサイトを上の方に表示させるための工夫のこと。タイトル設定・文章の内容・表示速度などが関係します。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ページ全体に関わります。特定の場所ではなく「サイト設計全体」の話です。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「SEOの基本設定をしてください。ページタイトルは「○○整体院｜新宿で15年の実績」、メタディスクリプション（説明文）は120文字以内で作ってください」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「SEO対策をして」だけではAIも困る。「どのキーワードで検索されたいのか」を一緒に伝えると効果的です。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">「新宿 整体」と検索して一番上に出てくるサイト→SEOがうまくできているサイト。</div>
+    </div>
+  </details>
+
+  <!-- ドメイン -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#faeeda">🟡</div>
+      <div class="s-text">
+        <div class="s-term">ドメイン</div>
+        <div class="s-tagline">ホームページの「住所（URL）」のこと</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">家の住所。「東京都新宿区○丁目」のように、インターネット上の住所がドメインです。</div>
+      <div class="sl">役割</div>
+      <div class="st">「https://example.com」のうち「example.com」の部分がドメイン。自分だけのURLを持つことで信頼感が上がります。年間数百〜数千円で取得できます。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">ブラウザのアドレスバー（URLが表示されているところ）に表示されます。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">ドメイン自体はAIではなく「お名前.com」や「ムームードメイン」などのサービスで取得します。AIには「取得したドメインをサーバーに設定する手順を教えてください」と聞くのが正解。</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「無料のドメインでいい」と思いがち。無料サービスは「.wixsite.com/自分の名前」など長くなり、信頼感が下がります。可能なら独自ドメインがおすすめ。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">「apple.com」「amazon.co.jp」→これがドメイン。ブランドそのものになります。</div>
+    </div>
+  </details>
+
+  <!-- サーバー -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#e1f5ee">🟢</div>
+      <div class="s-text">
+        <div class="s-term">サーバー（レンタルサーバー）</div>
+        <div class="s-tagline">ホームページのデータを置いておく「倉庫」</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">荷物（ホームページのデータ）を保管する貸し倉庫。誰かが住所（URL）に訪問するたびに、この倉庫から荷物を取り出して見せます。</div>
+      <div class="sl">役割</div>
+      <div class="st">ホームページのファイル（HTML・画像など）を保管して、世界中からアクセスできる状態にするためのコンピューター。月数百〜数千円でレンタルするのが一般的。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">インターネット上にある（物理的には世界中のデータセンターに）。初心者は「ロリポップ」「エックスサーバー」などのレンタルサービスを使うのが簡単。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">「ホームページ初心者向けのサーバー設定手順を教えてください。エックスサーバーを使う前提でお願いします」</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">「サーバーなしでいい」と思ってローカル（自分のPC内）だけで完成させてしまう。それだけでは誰にも見えません。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">Googleのサーバーは世界中に何十万台もある。私たちが使うのは小さなレンタル版ですが、仕組みは同じ。</div>
+    </div>
+  </details>
+
+  <!-- SSL -->
+  <details>
+    <summary>
+      <div class="s-icon" style="background:#fcebeb">🔴</div>
+      <div class="s-text">
+        <div class="s-term">SSL（エスエスエル）</div>
+        <div class="s-tagline">URLが「https」になるセキュリティ対策</div>
+      </div>
+      <span class="s-arrow">▼</span>
+    </summary>
+    <div class="card-body">
+      <div class="sl">🏠 家に例えると</div>
+      <div class="st">封筒に入れた手紙を「鍵のかかった金庫」で送るイメージ。途中で盗み見られないように暗号化する技術。</div>
+      <div class="sl">役割</div>
+      <div class="st">URLの先頭が「http://」ではなく「https://」になる状態のこと。通信を暗号化してくれるのでセキュリティが高い。Googleはhttpsでないサイトを「安全ではない」と表示するため、現代では必須です。</div>
+      <div class="sl">どこにある？</div>
+      <div class="st">URLの先頭の「https」と、アドレスバーの左側に出る「鍵マーク🔒」がSSL対応の証拠。</div>
+      <div class="divider"></div>
+      <div class="sl">💬 AIへの頼み方</div>
+      <div class="ai-box">SSL自体はサーバー側の設定で対応します。AIには「エックスサーバーでSSL（https化）を設定する手順を教えてください」と聞くのが正解。</div>
+      <div class="sl">⚠️ よくある初心者ミス</div>
+      <div class="mistake-box">SSLを設定しないまま公開してしまう。Googleに「このサイトは安全ではありません」と表示され、訪問者が一気に離れます。</div>
+      <div class="sl">📌 実例</div>
+      <div class="example-box">銀行・Amazon・Googleなど安全なサイトは全部「https://」で始まっている。鍵マークをクリックすると確認できます。</div>
+    </div>
+  </details>
+</div>
+
+<!-- ========== 卒業チェック ========== -->
+<div class="finish-box">
+  <h3>🎓 卒業チェック｜このプロンプトが書けたらゴール！</h3>
+  <div class="prompt">整体院のランディングページを作ってください。ヒーローセクション・サービス紹介（カードUI・3列）・FAQ・CTAボタン付きのフッターを含め、レスポンシブ対応・OGP設定あり・SSL対応の前提でお願いします。</div>
+  <p>この文章がスラスラ書けるようになったら、この教材は卒業です！全18用語、お疲れさまでした。</p>
+</div>
+
+<footer>
+  <p>AIでホームページを作りたい初心者向け用語教材 ｜ 全18用語</p>
+</footer>
+
+</div>
+</body>
+</html>
