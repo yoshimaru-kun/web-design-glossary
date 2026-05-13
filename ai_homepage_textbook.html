@@ -82,6 +82,8 @@ body {
 }
 .chapter-title::after { content: ''; flex: 1; height: 2px; background: var(--primary-light); border-radius: 2px; }
 .chapter-desc { font-size: 15px; color: var(--text-muted); margin-bottom: 2rem; }
+.chapter-image { width: 100%; max-width: 960px; margin: 0 auto 2.5rem; display: block; border-radius: 20px; box-shadow: var(--shadow-md); }
+.chapter-image img { width: 100%; height: auto; display: block; border-radius: inherit; }
 
 /* Details (Cards) */
 details {
@@ -154,6 +156,9 @@ footer { text-align: center; font-size: 13px; color: #94a3b8; margin-top: 4rem; 
 <div class="chapter">
   <div class="chapter-title">📐 章1｜画面の構成パーツ</div>
   <div class="chapter-desc">ホームページは「パーツの集まり」でできています。名前を知るだけで、AIへの指示がグッと具体的になります。</div>
+  <div class="chapter-image">
+    <img src="homepage-parts.png" alt="ホームページの各部位の名称図" />
+  </div>
 
   <!-- ヘッダー -->
   <details>
